@@ -6,6 +6,15 @@ plugins {
 }
 
 kotlin {
+
+    android()
+
+    jvm("desktop")
+
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
     cocoapods {
         version = "1.0.0"
         summary = "Some description for the Shared Module"
@@ -18,15 +27,6 @@ kotlin {
         }
         extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
-    android()
-
-    jvm("desktop")
-
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-
 
     sourceSets {
         val commonMain by getting {

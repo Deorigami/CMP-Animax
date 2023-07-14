@@ -42,6 +42,7 @@ kotlin {
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.koin)
                 implementation(libs.voyager.transition)
+                implementation(libs.voyager.tabNavigator)
 
                 // Koin
                 implementation("io.insert-koin:koin-core:3.4.0")

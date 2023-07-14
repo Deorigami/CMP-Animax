@@ -1,4 +1,4 @@
-rootProject.name = "MyApplication"
+rootProject.name = "Animax"
 
 include(":androidApp")
 include(":shared")
@@ -36,3 +36,4 @@ dependencyResolutionManagement {
 }
 include(":shared_feature_module:feature_core")
 include(":shared_feature_module:feature_dashboard")
+include(":shared_ui_components")
