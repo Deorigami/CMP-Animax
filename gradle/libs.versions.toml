@@ -1,0 +1,8 @@
+[versions]
+voyager = "1.0.0-rc05"
+
+[libraries]
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-transition = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
+voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
