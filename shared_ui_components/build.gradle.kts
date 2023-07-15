@@ -30,6 +30,7 @@ kotlin {
                 implementation(compose.components.resources)
                 api("dev.icerock.moko:resources-compose:0.23.0")
                 api("dev.icerock.moko:resources:0.23.0")
+                implementation("io.github.aakira:napier:2.6.1")
             }
         }
         val commonTest by getting {

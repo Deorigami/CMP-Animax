@@ -8,9 +8,12 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.with
+import androidx.compose.foundation.background
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion
 import androidx.compose.ui.unit.IntOffset
 import cafe.adriel.voyager.core.stack.StackEvent
 import cafe.adriel.voyager.navigator.Navigator
@@ -31,7 +34,7 @@ fun App() {
                 true
             },
         ){
-            CustomSlideTransition(it)
+            CustomSlideTransition(it, modifier = Modifier.background(color = Color.Black))
         }
     }
 }

@@ -23,11 +23,16 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.eyedea.feature_dashboard.download.DownloadScreen
 import com.eyedea.feature_dashboard.home.HomeScreen
 import com.eyedea.feature_dashboard.my_list.MyListScreen
 import com.eyedea.feature_dashboard.profile.ProfileScreen
 import com.eyedea.feature_dashboard.releases.ReleaseDateScreen
+import com.eyedea.shared_ui_components.style.Colors
+import com.eyedea.shared_ui_components.style.bodySmallBold
+import com.eyedea.shared_ui_components.style.bodySmallMedium
+import com.eyedea.shared_ui_components.style.bodyXSmallMedium
 
 object DashboardLandingScreen : Screen {
     @Composable
@@ -62,13 +67,21 @@ object DashboardLandingScreen : Screen {
     private fun TabItem(tab: Tab, modifier: Modifier = Modifier){
         val tabNavigator = LocalTabNavigator.current
         val isActive = tab == tabNavigator.current
-        Column(modifier = modifier.fillMaxWidth().clickable { tabNavigator.current = tab }.padding(vertical = 8.dp)) {
+        Column(
+            modifier = modifier.fillMaxWidth()
+                .clickable { tabNavigator.current = tab }
+                .padding(vertical = 8.dp, horizontal = 4.dp),
+        ) {
             tab.options.icon?.let { Image(
                 painter = it,
                 "",
-                modifier = Modifier.alpha(if (isActive) 1f else 0.6f).align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             ) }
-            Text(tab.options.title)
+            Text(
+                text = tab.options.title,
+                style = (if (isActive) bodySmallBold() else bodyXSmallMedium()).copy(color = if (isActive) Colors.primary500() else Colors.greyScale500()),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
     }
 }
