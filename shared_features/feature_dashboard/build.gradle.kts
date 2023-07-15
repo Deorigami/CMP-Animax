@@ -23,7 +23,7 @@ kotlin {
         ios.deploymentTarget = "14.1"
         podfile = project.file("../iosApp/Podfile")
         framework {
-            baseName = "shared"
+            baseName = "feature_dashboard"
             isStatic = true
         }
         extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
@@ -33,14 +33,21 @@ kotlin {
         val commonMain by getting {
             dependencies {
 
-                api(project(":shared_features:feature_dashboard"))
+                api(project(":shared_features:feature_core"))
+                api(project(":shared_ui_components"))
+                api(project(":shared_services:service_anime"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
-                implementation(compose.animation)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+                implementation(libs.voyager.navigator)
+                implementation(libs.voyager.koin)
+                implementation(libs.voyager.transition)
+                implementation(libs.voyager.tabNavigator)
+
+                // Voyager
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.koin)
                 implementation(libs.voyager.transition)
@@ -57,7 +64,7 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
                 implementation("io.ktor:ktor-client-core:2.3.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-                implementation("io.github.aakira:napier:2.6.1")
+
             }
         }
         val androidMain by getting {
@@ -96,7 +103,7 @@ kotlin {
 
 android {
     compileSdk = (findProperty("android.compileSdk") as String).toInt()
-    namespace = "com.myapplication.common"
+    namespace = "com.eyedea.shared_feature_dashboard"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")

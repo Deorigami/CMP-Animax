@@ -23,7 +23,7 @@ kotlin {
         ios.deploymentTarget = "14.1"
         podfile = project.file("../iosApp/Podfile")
         framework {
-            baseName = "shared"
+            baseName = "feature_core"
             isStatic = true
         }
         extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
@@ -33,12 +33,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
 
-                api(project(":shared_features:feature_dashboard"))
-
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
-                implementation(compose.animation)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
                 implementation(libs.voyager.navigator)
@@ -50,6 +47,7 @@ kotlin {
                 implementation("io.insert-koin:koin-test:3.2.0")
                 implementation("io.insert-koin:koin-compose:1.0.3")
 
+
                 implementation("com.russhwolf:multiplatform-settings:1.0.0")
                 implementation("com.russhwolf:multiplatform-settings-no-arg:1.0.0")
 
@@ -57,7 +55,9 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
                 implementation("io.ktor:ktor-client-core:2.3.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-                implementation("io.github.aakira:napier:2.6.1")
+
+                api("io.github.aakira:napier:2.6.1")
+
             }
         }
         val androidMain by getting {
@@ -89,14 +89,16 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.common)
+                implementation("io.ktor:ktor-client-apache:2.3.0")
             }
         }
     }
+
 }
 
 android {
     compileSdk = (findProperty("android.compileSdk") as String).toInt()
-    namespace = "com.myapplication.common"
+    namespace = "com.eyedea.shared_core"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")

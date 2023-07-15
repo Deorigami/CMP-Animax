@@ -34,6 +34,7 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
-include(":shared_feature_module:feature_core")
-include(":shared_feature_module:feature_dashboard")
+include(":shared_features:feature_core")
+include(":shared_features:feature_dashboard")
 include(":shared_ui_components")
+include(":shared_services:service_anime")

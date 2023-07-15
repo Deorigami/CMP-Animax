@@ -31,6 +31,8 @@ kotlin {
                 api("dev.icerock.moko:resources-compose:0.23.0")
                 api("dev.icerock.moko:resources:0.23.0")
                 implementation("io.github.aakira:napier:2.6.1")
+
+                api("io.github.qdsfdhvh:image-loader:1.6.0")
             }
         }
         val commonTest by getting {

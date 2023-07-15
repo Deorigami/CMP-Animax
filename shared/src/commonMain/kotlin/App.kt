@@ -11,6 +11,7 @@ import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion
@@ -20,21 +21,42 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.ScreenTransition
 import cafe.adriel.voyager.transitions.ScreenTransitionContent
 import cafe.adriel.voyager.transitions.SlideOrientation
+import com.eyedea.feature_dashboard.featureDashboardModule
 import com.eyedea.feature_dashboard.landing.DashboardLandingScreen
+import com.eyedea.service_anime.data.dto.TopAnimeDto
+import com.eyedea.service_anime.data.mapper.TopAnimeDtoMapper
+import com.eyedea.service_anime.serviceAnimeModule
+import com.eyedea.shared_ui_components.util.generateImageLoader
+import com.seiko.imageloader.LocalImageLoader
 import io.github.aakira.napier.Napier
+import org.koin.compose.koinInject
+import org.koin.core.context.startKoin
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun App() {
-    MaterialTheme {
-        Navigator(
-            DashboardLandingScreen,
-            onBackPressed = {
-                Napier.d(it.toString(), tag = "ANGGATAG")
-                true
-            },
-        ){
-            CustomSlideTransition(it, modifier = Modifier.background(color = Color.Black))
+    startKoin {
+        modules(listOf(
+            serviceAnimeModule(),
+            featureDashboardModule()
+        ).flatten())
+    }
+
+    CompositionLocalProvider(
+        LocalImageLoader provides generateImageLoader()
+    ){
+        MaterialTheme {
+            Navigator(
+                DashboardLandingScreen,
+                onBackPressed = {
+                    Napier.d(it.toString(), tag = "BACKPRESS")
+                    true
+                },
+            ){
+                CustomSlideTransition(it, modifier = Modifier.background(color = Color.Black))
+            }
         }
     }
 }

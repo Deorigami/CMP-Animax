@@ -6,4 +6,5 @@ plugins {
     id("com.android.library").apply(false)
     id("org.jetbrains.compose").apply(false)
     id("dev.icerock.mobile.multiplatform-resources") version ("0.23.0") apply (false)
+    id("org.jetbrains.kotlin.plugin.serialization") version("1.8.20")
 }

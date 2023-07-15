@@ -1,0 +1,17 @@
+package com.eyedea.service_anime.domain.usecase
+
+import com.eyedea.service_anime.domain.entity.TopAnimeEntity
+import com.eyedea.service_anime.domain.repository.ServiceAnimeRepository
+import com.eyedea.shared_core.base.BaseRespondEntity
+import com.eyedea.shared_core.base.BaseUseCase
+
+class GetPopularAnimeListUseCase(
+    private val repo : ServiceAnimeRepository
+) : BaseUseCase<Unit, List<TopAnimeEntity>>() {
+    override val default: List<TopAnimeEntity>
+        get() = emptyList()
+
+    override suspend fun build(param: Unit): BaseRespondEntity<List<TopAnimeEntity>> {
+        return repo.getTopHitsAnime()
+    }
+}

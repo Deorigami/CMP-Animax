@@ -23,7 +23,7 @@ kotlin {
         ios.deploymentTarget = "14.1"
         podfile = project.file("../iosApp/Podfile")
         framework {
-            baseName = "shared"
+            baseName = "service_anime"
             isStatic = true
         }
         extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
@@ -32,32 +32,36 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                // Included Local Library
+                api(project(":shared_features:feature_core"))
 
-                api(project(":shared_features:feature_dashboard"))
-
+                // Other Deps
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
-                implementation(compose.animation)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.koin)
                 implementation(libs.voyager.transition)
+                implementation(libs.voyager.tabNavigator)
 
                 // Koin
                 implementation("io.insert-koin:koin-core:3.4.0")
                 implementation("io.insert-koin:koin-test:3.2.0")
                 implementation("io.insert-koin:koin-compose:1.0.3")
 
+
+                // Key-Value Prefs
                 implementation("com.russhwolf:multiplatform-settings:1.0.0")
                 implementation("com.russhwolf:multiplatform-settings-no-arg:1.0.0")
 
+                // Ktor
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
                 implementation("io.ktor:ktor-client-core:2.3.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-                implementation("io.github.aakira:napier:2.6.1")
+
             }
         }
         val androidMain by getting {
@@ -96,7 +100,7 @@ kotlin {
 
 android {
     compileSdk = (findProperty("android.compileSdk") as String).toInt()
-    namespace = "com.myapplication.common"
+    namespace = "com.eyedea.service_anime"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
