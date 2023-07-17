@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -71,7 +72,7 @@ object Button {
             )
         ) {
             leadingIcon?.let {
-                Image(leadingIcon, "")
+                Image(leadingIcon, "", modifier = Modifier.size(20.dp))
             }
             if (text.isNotEmpty()) {
                 Text(text, Modifier.padding(start = 8.dp), style = bodyMediumSemibold())
@@ -85,7 +86,8 @@ object Button {
         modifier: Modifier = Modifier,
         radius: Dp? = null,
         onClick: callback = {},
-        leadingIcon: Painter? = null
+        leadingIcon: Painter? = null,
+        borderColor: Color? = null
     ) {
         Button(
             onClick = { onClick.invoke() },
@@ -94,7 +96,7 @@ object Button {
                 radius != null -> RoundedCornerShape(radius)
                 else -> RoundedCornerShape(100)
             },
-            border = BorderStroke(2.dp, Color.White),
+            border = BorderStroke(2.dp, borderColor ?: Color.White),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Transparent,
             ),
@@ -103,7 +105,7 @@ object Button {
             )
         ) {
             leadingIcon?.let {
-                Image(leadingIcon, "")
+                Image(leadingIcon, "", modifier = Modifier.size(20.dp))
             }
             if (text.isNotEmpty()) {
                 Text(text, Modifier.padding(start = 8.dp), style = bodyMediumSemibold())

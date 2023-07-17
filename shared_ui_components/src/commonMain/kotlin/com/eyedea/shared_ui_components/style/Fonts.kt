@@ -76,6 +76,12 @@ import dev.icerock.moko.resources.compose.fontFamilyResource
     color = Color.White
 )
 
+@Composable fun bodySmallSemiBold() = TextStyle(
+    fontSize = 12.sp,
+    fontFamily = urbanistSemiBoldFamily(),
+    color = Color.White
+)
+
 @Composable fun bodyMediumSemibold() = TextStyle(
     fontSize = 14.sp,
     fontFamily = urbanistSemiBoldFamily(),
