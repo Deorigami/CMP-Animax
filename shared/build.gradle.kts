@@ -1,11 +1,10 @@
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
-
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
     id("kotlinx-serialization")
+    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 kotlin {
@@ -26,9 +25,7 @@ kotlin {
         podfile = project.file("../iosApp/Podfile")
         framework {
             baseName = "shared"
-            isStatic = true
         }
-        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {
@@ -61,6 +58,9 @@ kotlin {
                 implementation("io.ktor:ktor-client-core:2.3.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
                 implementation("io.github.aakira:napier:2.6.1")
+
+                implementation("dev.icerock.moko:resources-compose:0.23.0")
+                implementation("dev.icerock.moko:resources:0.23.0")
             }
         }
         val androidMain by getting {

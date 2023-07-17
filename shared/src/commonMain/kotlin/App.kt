@@ -24,8 +24,10 @@ import cafe.adriel.voyager.transitions.SlideTransition
 import com.eyedea.feature_dashboard.featureDashboardModule
 import com.eyedea.feature_dashboard.landing.DashboardLandingScreen
 import com.eyedea.service_anime.serviceAnimeModule
+import com.eyedea.shared_core.Platform
 import com.eyedea.shared_ui_components.util.generateImageLoader
 import com.seiko.imageloader.LocalImageLoader
+import di.initKoin
 import di.routerModule
 import io.github.aakira.napier.Napier
 import org.koin.core.context.startKoin

@@ -1,3 +1,11 @@
+import org.jetbrains.compose.desktop.application.tasks.AbstractNativeMacApplicationPackageAppDirTask
+import org.jetbrains.kotlin.gradle.plugin.mpp.AbstractExecutable
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBinary
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
+import org.jetbrains.kotlin.konan.file.File as KonanFile
+import kotlin.io.println
+import java.io.FileFilter
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")

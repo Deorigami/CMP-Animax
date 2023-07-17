@@ -2,6 +2,10 @@ package com.eyedea.shared_ui_components.util
 
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import okio.Path
+import okio.Path.Companion.toPath
+import platform.Foundation.NSCachesDirectory
+import platform.Foundation.NSSearchPathForDirectoriesInDomains
+import platform.Foundation.NSUserDomainMask
 
 actual object CommonImageLoaderImpl : CommonImageLoader {
     override fun ComponentRegistryBuilder.setupDefaultComponents() {
@@ -14,6 +18,6 @@ actual object CommonImageLoaderImpl : CommonImageLoader {
             NSUserDomainMask,
             true
         ).first() as String
-        return (cacheDir + "/media").toPath()
+        return ("$cacheDir/media").toPath()
     }
 }
