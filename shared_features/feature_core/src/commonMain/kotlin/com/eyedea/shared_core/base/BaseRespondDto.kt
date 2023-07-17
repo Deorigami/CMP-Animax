@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BaseRespondDto<T>(
-    val status: Int,
+    val status: Int? = null,
     val data: T
 ) {
     companion object {

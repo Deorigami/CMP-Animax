@@ -5,14 +5,14 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 
 actual abstract class BaseViewModel {
-    actual val scope : CoroutineScope = MainScope()
+    actual val coroutineScope : CoroutineScope = MainScope()
     protected actual fun onCleared() {
         clear()
     }
 
     private fun clear(){
         onCleared()
-        scope.cancel()
+        coroutineScope.cancel()
         getStatefulData().forEach { it.cancel() }
     }
 

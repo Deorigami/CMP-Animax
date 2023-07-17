@@ -20,7 +20,7 @@ object KtorNetworkProvider {
     val platform = getPlatform().name
     val client get() = KtorClientEngine.build().getClientEngine {
         defaultRequest {
-            url("http://localhost:3000/".takeIf { platform == "desktop" } ?: "http://10.0.2.2:3000/")
+            url("https://api.jikan.moe/v4/")
             headers {
 
             }

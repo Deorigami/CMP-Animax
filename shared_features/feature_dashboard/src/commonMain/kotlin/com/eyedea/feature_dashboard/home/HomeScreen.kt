@@ -14,13 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
@@ -28,68 +23,68 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
-import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.eyedea.feature_dashboard.DashboardRouter
+import com.eyedea.shared_core.base.BaseTab
 import com.eyedea.shared_ui_components.Res
 import com.eyedea.shared_ui_components.composables.Button
 import com.eyedea.shared_ui_components.composables.HomeRowList
-import com.eyedea.shared_ui_components.composables.HomeRowListCardItem
 import com.eyedea.shared_ui_components.composables.HomeRowListData
 import com.eyedea.shared_ui_components.style.bodySmallMedium
 import com.eyedea.shared_ui_components.style.h4Bold
+import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
 import io.github.aakira.napier.Napier
-import org.koin.compose.LocalKoinScope
 import org.koin.compose.koinInject
-import org.koin.compose.scope.rememberKoinScope
-import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-object HomeScreen : Tab {
+object HomeScreen : BaseTab(), KoinComponent {
+
+    override val router by inject<DashboardRouter>()
+
     @Composable
-    override fun Content() {
-        val viewModel = koinInject<HomeScreenModel>()
-        val popularAnimeState = viewModel.popularAnime.state.collectAsState().value
-        val popularAnimeList = remember(popularAnimeState.data) {
-            val rowListData : List<HomeRowListData> = popularAnimeState.data?.map { HomeRowListData(
+    override fun ComposeContent() {
+        super.ComposeContent()
+        val screenModel = koinInject<HomeScreenModel>()
+        val topRatedAnimeList = screenModel.popularAnime.state.collectAsState().value
+        Napier.d(tag = "ANGGATAG") { topRatedAnimeList.toString() }
+        val popularAnimeList = remember(topRatedAnimeList.data) {
+            val rowListData : List<HomeRowListData> = topRatedAnimeList.data?.map { HomeRowListData(
                 image = it.animeImg,
-                rating = "9.8",
-                index = ""
+                title = it.animeTitle,
+                index = "",
+                rating = it.rating
             ) } ?: emptyList()
             rowListData.toMutableStateList()
         }
-
         val containerScrollState = rememberScrollState()
-
-
-
-        LifecycleEffect(
-            onDisposed = {Napier.d("ON DISPOSED")},
-            onStarted = {Napier.d { "ON STARTED" }}
-        )
 
         Column (modifier = Modifier.verticalScroll(containerScrollState)){
             Header(modifier = Modifier.fillMaxWidth().background(Color.Black))
             HomeRowList(
                 headerTitle = "Popular Anime",
                 list = popularAnimeList,
-                modifier = Modifier.padding(top = 24.dp)
+                modifier = Modifier.padding(top = 24.dp),
+                onCardPressed = {
+                    router.navigateToAnimeDetail(topRatedAnimeList.data?.getOrNull(it)?.animeId ?: return@HomeRowList)
+                },
             )
             HomeRowList(
                 headerTitle = "New Episode Releases",
                 list = popularAnimeList.map { it.copy(index = "") },
                 modifier = Modifier.padding(top = 24.dp, bottom = 127.dp),
-                onRightHeaderPressed = { Napier.d(tag = "ANGGATAG") { "Clicked" } }
+                onRightHeaderPressed = {  }
             )
         }
     }
+
+    override val activeIcon: ImageResource get() = Res.images.ic_home_selected
+    override val inActiveIcon: ImageResource get() = Res.images.ic_home
+    override val label: String get() = "Home"
+
 
     @Composable
     fun Header(
@@ -140,21 +135,4 @@ object HomeScreen : Tab {
         }
     }
 
-    override val options: TabOptions
-        @Composable
-        get() {
-            val navigator = LocalTabNavigator.current
-            val isActive = navigator.current == this
-
-            val title = "Home"
-            val icon = painterResource(if (isActive) Res.images.ic_home_selected else Res.images.ic_home)
-
-            return remember {
-                TabOptions(
-                    index = 3u,
-                    title = title,
-                    icon = icon
-                )
-            }
-        }
 }

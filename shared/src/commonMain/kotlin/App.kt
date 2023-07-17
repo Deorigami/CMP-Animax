@@ -14,36 +14,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion
 import androidx.compose.ui.unit.IntOffset
 import cafe.adriel.voyager.core.stack.StackEvent
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.ScreenTransition
 import cafe.adriel.voyager.transitions.ScreenTransitionContent
 import cafe.adriel.voyager.transitions.SlideOrientation
+import cafe.adriel.voyager.transitions.SlideTransition
 import com.eyedea.feature_dashboard.featureDashboardModule
 import com.eyedea.feature_dashboard.landing.DashboardLandingScreen
-import com.eyedea.service_anime.data.dto.TopAnimeDto
-import com.eyedea.service_anime.data.mapper.TopAnimeDtoMapper
 import com.eyedea.service_anime.serviceAnimeModule
 import com.eyedea.shared_ui_components.util.generateImageLoader
 import com.seiko.imageloader.LocalImageLoader
+import di.routerModule
 import io.github.aakira.napier.Napier
-import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun App() {
     startKoin {
-        modules(listOf(
-            serviceAnimeModule(),
-            featureDashboardModule()
-        ).flatten())
+        modules(
+            listOf(
+                serviceAnimeModule(),
+                featureDashboardModule(),
+            ).flatten().plus(routerModule()),
+        )
     }
-
     CompositionLocalProvider(
         LocalImageLoader provides generateImageLoader()
     ){
@@ -55,7 +52,7 @@ fun App() {
                     true
                 },
             ){
-                CustomSlideTransition(it, modifier = Modifier.background(color = Color.Black))
+                SlideTransition(it, modifier = Modifier.background(color = Color.Black))
             }
         }
     }

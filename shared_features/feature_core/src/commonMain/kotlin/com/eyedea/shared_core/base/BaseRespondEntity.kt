@@ -16,7 +16,7 @@ import kotlinx.serialization.serializer
 
 @Serializable
 data class BaseRespondEntity<R> constructor(
-    @Serializable(with = DynamicLookupSerializer::class) val data : R? = null,
+    val data : R? = null,
     @Serializable(with = ThrowableSerializer::class) val error : Throwable? = null,
     val status : Int = 200
 )

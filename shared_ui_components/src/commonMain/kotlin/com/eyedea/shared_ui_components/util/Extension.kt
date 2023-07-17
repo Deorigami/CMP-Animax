@@ -8,18 +8,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
 
-fun Modifier.scaledClickable(onClick: () -> Unit): Modifier = composed {
-
+fun Modifier.scaledClickable(onClick: callback): Modifier = composed {
     val coroutineScope = rememberCoroutineScope()
     val scaleValue = remember {
         Animatable(1f)
     }
-    Napier.d { scaleValue.value.toString() }
     clickable(
         indication = null,
         interactionSource = remember { MutableInteractionSource() },
@@ -36,5 +32,4 @@ fun Modifier.scaledClickable(onClick: () -> Unit): Modifier = composed {
             onClick.invoke()
         }
     }.then(Modifier.scale(scaleValue.value))
-
 }

@@ -1,5 +1,6 @@
 package com.eyedea.feature_dashboard.landing
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,14 +11,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -27,57 +35,86 @@ import com.eyedea.feature_dashboard.home.HomeScreen
 import com.eyedea.feature_dashboard.my_list.MyListScreen
 import com.eyedea.feature_dashboard.profile.ProfileScreen
 import com.eyedea.feature_dashboard.releases.ReleaseDateScreen
+import com.eyedea.shared_core.base.BaseTab
+import com.eyedea.shared_core.util.callback
+import com.eyedea.shared_core.util.genericCallback
 import com.eyedea.shared_ui_components.style.Colors
 import com.eyedea.shared_ui_components.style.bodySmallBold
 import com.eyedea.shared_ui_components.style.bodyXSmallMedium
+import dev.icerock.moko.resources.compose.painterResource
+import io.github.aakira.napier.Napier
+import kotlinx.coroutines.launch
 
 object DashboardLandingScreen : Screen {
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.current
-        TabNavigator(
-            HomeScreen
-        ){
-            Box(modifier = Modifier.fillMaxSize()) {
-                CurrentTab()
-                TabNavigator(
-                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().background(Color.White),
-                    HomeScreen, ReleaseDateScreen, MyListScreen, DownloadScreen, ProfileScreen
-                )
+        val localNavigator = LocalNavigator.currentOrThrow
+        val screenList = listOf(HomeScreen, ReleaseDateScreen, MyListScreen, DownloadScreen, ProfileScreen)
+        val pagerState = rememberPagerState()
+        val coroutineScope = rememberCoroutineScope()
+        Box(modifier = Modifier.fillMaxSize()) {
+            HorizontalPager(
+                pageCount = screenList.size,
+                state = pagerState,
+                userScrollEnabled = false
+            ){
+                screenList[it].apply {
+                    navigator = localNavigator
+                }.ComposeContent()
             }
+            TabNavigator(
+                modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().background(Color.White),
+                tabs = screenList,
+                activeTab = pagerState.currentPage,
+                onTabPressed = {
+                    coroutineScope.launch {
+                        pagerState.scrollToPage(it)
+                    }
+                }
+            )
         }
     }
 
     @Composable
     fun TabNavigator(
         modifier: Modifier = Modifier,
-        vararg tabs: Tab
+        tabs : List<BaseTab>,
+        onTabPressed: genericCallback<Int> = {},
+        activeTab : Int = 0
     ) {
         LazyRow(modifier = modifier) {
-            items(tabs.asList()){
-                TabItem(it, modifier = Modifier.fillParentMaxWidth(1f / tabs.size))
+            itemsIndexed(tabs){index , data ->
+                TabItem(
+                    data,
+                    modifier = Modifier.fillParentMaxWidth(1f / tabs.size),
+                    onTabPressed = {onTabPressed.invoke(index)},
+                    isActive = activeTab == index
+                )
             }
         }
     }
 
     @Composable
-    private fun TabItem(tab: Tab, modifier: Modifier = Modifier){
-        val tabNavigator = LocalTabNavigator.current
-        val isActive = tab == tabNavigator.current
+    private fun TabItem(tab: BaseTab, modifier: Modifier = Modifier, onTabPressed: callback = {}, isActive : Boolean = false){
         Column(
             modifier = modifier.fillMaxWidth()
-                .clickable { tabNavigator.current = tab }
+                .clickable { onTabPressed.invoke() }
+                .background(Color.Black)
                 .padding(vertical = 8.dp, horizontal = 4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            tab.options.icon?.let { Image(
-                painter = it,
+            Image(
+                painter = painterResource(if (isActive) tab.activeIcon else tab.inActiveIcon),
                 "",
                 modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) }
+            )
             Text(
-                text = tab.options.title,
+                text = tab.label,
                 style = (if (isActive) bodySmallBold() else bodyXSmallMedium()).copy(color = if (isActive) Colors.primary500() else Colors.greyScale500()),
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

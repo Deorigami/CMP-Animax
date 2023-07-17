@@ -1,6 +1,6 @@
 package com.eyedea.service_anime
 
-import com.eyedea.service_anime.data.mapper.TopAnimeDtoMapper
+import com.eyedea.service_anime.data.mapper.TopRatedAnimeDtoMapper
 import com.eyedea.service_anime.data.repository.ServiceAnimeRepositoryImpl
 import com.eyedea.service_anime.domain.repository.ServiceAnimeRepository
 import com.eyedea.service_anime.domain.usecase.GetPopularAnimeListUseCase
@@ -16,7 +16,7 @@ fun serviceAnimeModule() = listOf(
 )
 
 private fun mapperModule() = module {
-    singleOf(::TopAnimeDtoMapper)
+    singleOf(::TopRatedAnimeDtoMapper)
 }
 
 private fun repositoryModule() = module {

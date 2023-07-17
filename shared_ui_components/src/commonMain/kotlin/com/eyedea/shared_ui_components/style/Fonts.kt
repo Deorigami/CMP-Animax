@@ -27,6 +27,12 @@ import dev.icerock.moko.resources.compose.fontFamilyResource
     color = Color.White
 )
 
+@Composable fun h6Bold() = TextStyle(
+    fontSize = 18.sp,
+    fontFamily = urbanistBoldFamily(),
+    color = Color.White
+)
+
 @Composable fun h5Bold() = TextStyle(
     fontSize = 20.sp,
     fontFamily = urbanistBoldFamily(),

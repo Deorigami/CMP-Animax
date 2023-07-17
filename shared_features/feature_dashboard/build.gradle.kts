@@ -34,6 +34,8 @@ kotlin {
             dependencies {
 
                 api(project(":shared_features:feature_core"))
+                api(project(":shared_features:feature_util"))
+
                 api(project(":shared_ui_components"))
                 api(project(":shared_services:service_anime"))
 
@@ -46,11 +48,6 @@ kotlin {
                 implementation(libs.voyager.koin)
                 implementation(libs.voyager.transition)
                 implementation(libs.voyager.tabNavigator)
-
-                // Voyager
-                implementation(libs.voyager.navigator)
-                implementation(libs.voyager.koin)
-                implementation(libs.voyager.transition)
 
                 // Koin
                 implementation("io.insert-koin:koin-core:3.4.0")

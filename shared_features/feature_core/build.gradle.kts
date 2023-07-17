@@ -4,6 +4,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.compose")
     id("kotlinx-serialization")
+    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 kotlin {
@@ -41,6 +42,10 @@ kotlin {
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.koin)
                 implementation(libs.voyager.transition)
+                implementation(libs.voyager.tabNavigator)
+
+                api("dev.icerock.moko:resources-compose:0.23.0")
+                api("dev.icerock.moko:resources:0.23.0")
 
                 // Koin
                 implementation("io.insert-koin:koin-core:3.4.0")
@@ -94,6 +99,12 @@ kotlin {
         }
     }
 
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.eyedea.core" // required
+    multiplatformResourcesClassName = "Res" // optional, default MR
+    iosBaseLocalizationRegion = "en" // optional, default "en"
 }
 
 android {

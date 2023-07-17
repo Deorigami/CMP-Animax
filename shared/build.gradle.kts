@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
@@ -34,6 +36,7 @@ kotlin {
             dependencies {
 
                 api(project(":shared_features:feature_dashboard"))
+                api(project(":shared_features:feature_detail"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
