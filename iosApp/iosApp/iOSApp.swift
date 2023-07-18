@@ -10,6 +10,6 @@ struct iOSApp: App {
 	}
     
     init() {
-//         KoinHelperKt.doInitKoin()
+        KoinHelperKt.doInitKoin()
     }
 }

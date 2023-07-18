@@ -1,15 +1,8 @@
-import org.jetbrains.compose.desktop.application.tasks.AbstractNativeMacApplicationPackageAppDirTask
-import org.jetbrains.kotlin.gradle.plugin.mpp.AbstractExecutable
-import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBinary
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
-import org.jetbrains.kotlin.konan.file.File as KonanFile
-import kotlin.io.println
-import java.io.FileFilter
-
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.compose")
+    kotlin("native.cocoapods")
     id("dev.icerock.mobile.multiplatform-resources")
 }
 
@@ -18,14 +11,20 @@ kotlin {
 
     jvm("desktop")
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+    cocoapods {
+        version = "1.0.0"
+        summary = "Some description for the Shared Module"
+        homepage = "Link to the Shared Module homepage"
+        ios.deploymentTarget = "14.1"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
             baseName = "shared_ui_components"
         }
+        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {

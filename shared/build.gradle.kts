@@ -26,6 +26,7 @@ kotlin {
         framework {
             baseName = "shared"
         }
+        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {
@@ -34,6 +35,7 @@ kotlin {
 
                 api(project(":shared_features:feature_dashboard"))
                 api(project(":shared_features:feature_detail"))
+                api(project(":shared_ui_components"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -61,6 +63,8 @@ kotlin {
 
                 implementation("dev.icerock.moko:resources-compose:0.23.0")
                 implementation("dev.icerock.moko:resources:0.23.0")
+
+                implementation("io.github.qdsfdhvh:image-loader:1.6.0")
             }
         }
         val androidMain by getting {

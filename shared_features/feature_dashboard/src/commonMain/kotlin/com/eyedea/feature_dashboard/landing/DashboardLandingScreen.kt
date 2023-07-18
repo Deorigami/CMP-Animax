@@ -38,6 +38,7 @@ import com.eyedea.feature_dashboard.releases.ReleaseDateScreen
 import com.eyedea.shared_core.base.BaseTab
 import com.eyedea.shared_core.util.callback
 import com.eyedea.shared_core.util.genericCallback
+import com.eyedea.shared_ui_components.Res
 import com.eyedea.shared_ui_components.style.Colors
 import com.eyedea.shared_ui_components.style.bodySmallBold
 import com.eyedea.shared_ui_components.style.bodyXSmallMedium
@@ -91,6 +92,7 @@ object DashboardLandingScreen : Screen {
                     onTabPressed = {onTabPressed.invoke(index)},
                     isActive = activeTab == index
                 )
+//                Image(painterResource(data.activeIcon), "")
             }
         }
     }
@@ -104,14 +106,16 @@ object DashboardLandingScreen : Screen {
                 .padding(vertical = 8.dp, horizontal = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            val textColor = if (isActive) Colors.primary500() else Colors.greyScale500()
+            val icon = if (isActive) tab.activeIcon else tab.inActiveIcon
             Image(
-                painter = painterResource(if (isActive) tab.activeIcon else tab.inActiveIcon),
+                painter = painterResource(icon),
                 "",
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Text(
                 text = tab.label,
-                style = (if (isActive) bodySmallBold() else bodyXSmallMedium()).copy(color = if (isActive) Colors.primary500() else Colors.greyScale500()),
+                style = bodySmallBold().copy(textColor),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

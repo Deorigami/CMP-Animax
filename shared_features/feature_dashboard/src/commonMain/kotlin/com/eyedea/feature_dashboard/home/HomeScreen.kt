@@ -125,9 +125,10 @@ object HomeScreen : BaseTab(), KoinComponent {
                     "Action, Shounen, Martial Arts, Adventure, Swordsman, Demon, Zero to Hero",
                     style = bodySmallMedium(),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
-                Row {
+                Row(modifier = Modifier.padding(top = 8.dp)) {
                     Button.SolidMedium(leadingIcon = painterResource(Res.images.ic_play), text = "Play")
                     Button.OutlinedMedium("My List", leadingIcon = painterResource(Res.images.ic_add), modifier = Modifier.padding(start = 8.dp))
                 }
