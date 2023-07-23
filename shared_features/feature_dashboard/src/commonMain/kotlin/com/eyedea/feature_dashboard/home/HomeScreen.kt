@@ -27,16 +27,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eyedea.feature_dashboard.DashboardRouter
+import com.eyedea.feature_dashboard.home.mapper.AnimeThumbnailEntityMapper
+import com.eyedea.service_anime.domain.entity.AnimeShowcaseEntity
 import com.eyedea.shared_core.base.BaseTab
 import com.eyedea.shared_ui_components.Res
 import com.eyedea.shared_ui_components.composables.Button
 import com.eyedea.shared_ui_components.composables.HomeRowList
-import com.eyedea.shared_ui_components.composables.HomeRowListData
 import com.eyedea.shared_ui_components.style.bodySmallMedium
 import com.eyedea.shared_ui_components.style.h4Bold
+import com.seiko.imageloader.rememberImagePainter
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
-import io.github.aakira.napier.Napier
 import org.koin.compose.koinInject
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -49,34 +50,43 @@ object HomeScreen : BaseTab(), KoinComponent {
     override fun ComposeContent() {
         super.ComposeContent()
         val screenModel = koinInject<HomeScreenModel>()
-        val topRatedAnimeList = screenModel.popularAnime.state.collectAsState().value
-        Napier.d(tag = "ANGGATAG") { topRatedAnimeList.toString() }
-        val popularAnimeList = remember(topRatedAnimeList.data) {
-            val rowListData : List<HomeRowListData> = topRatedAnimeList.data?.map { HomeRowListData(
-                image = it.animeImg,
-                title = it.animeTitle,
-                index = "",
-                rating = it.rating
-            ) } ?: emptyList()
-            rowListData.toMutableStateList()
+        val animeShowCaseListState = screenModel.popularAnime.state.collectAsState().value
+        val newReleaseListState = screenModel.newRelease.state.collectAsState().value
+        val trendingListState = remember(animeShowCaseListState.data) {
+            animeShowCaseListState.data?.trending?.toMutableStateList()
+        }
+        val trendingListData = remember(trendingListState) {
+            AnimeThumbnailEntityMapper().invoke(trendingListState)
+        }
+        val newReleaseList = remember(newReleaseListState.data) {
+            AnimeThumbnailEntityMapper().invoke(newReleaseListState.data?.take(10))
         }
         val containerScrollState = rememberScrollState()
 
+
         Column (modifier = Modifier.verticalScroll(containerScrollState)){
-            Header(modifier = Modifier.fillMaxWidth().background(Color.Black))
+            trendingListState?.first()?.let {
+                Header(
+                    modifier = Modifier.fillMaxWidth().background(Color.Black),
+                    data = it
+                )
+            }
             HomeRowList(
-                headerTitle = "Popular Anime",
-                list = popularAnimeList,
+                headerTitle = "Trending",
+                list = trendingListData,
                 modifier = Modifier.padding(top = 24.dp),
                 onCardPressed = {
-                    router.navigateToAnimeDetail(topRatedAnimeList.data?.getOrNull(it)?.animeId ?: return@HomeRowList)
+                    router.navigateToAnimeDetail(trendingListState?.getOrNull(it)?.animeId ?: return@HomeRowList)
                 },
             )
             HomeRowList(
                 headerTitle = "New Episode Releases",
-                list = popularAnimeList.map { it.copy(index = "") },
+                list = newReleaseList,
                 modifier = Modifier.padding(top = 24.dp, bottom = 127.dp),
-                onRightHeaderPressed = {  }
+                onRightHeaderPressed = {  },
+                onCardPressed = {
+                    router.navigateToAnimeDetail(newReleaseListState.data?.getOrNull(it)?.animeId ?: return@HomeRowList)
+                }
             )
         }
     }
@@ -89,10 +99,13 @@ object HomeScreen : BaseTab(), KoinComponent {
     @Composable
     fun Header(
         modifier: Modifier = Modifier,
+        data : AnimeShowcaseEntity
     ) {
         Box(modifier.fillMaxWidth()) {
+            val image = rememberImagePainter(data.animeImg)
+
             Image(
-                painter = painterResource(Res.images.hero_dashboard_bg),
+                painter = image,
                 "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxWidth().height(400.dp).drawWithCache {
@@ -116,13 +129,13 @@ object HomeScreen : BaseTab(), KoinComponent {
             }
             Column(modifier = Modifier.fillMaxWidth(0.75f).align(Alignment.BottomStart).padding(start = 24.dp, bottom = 24.dp)) {
                 Text(
-                    "Demon Slayer: Kimetsu no Yaiba",
+                    data.animeTitle,
                     style = h4Bold(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    "Action, Shounen, Martial Arts, Adventure, Swordsman, Demon, Zero to Hero",
+                    data.genres,
                     style = bodySmallMedium(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

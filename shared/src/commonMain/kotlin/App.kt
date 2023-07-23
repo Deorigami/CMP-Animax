@@ -8,7 +8,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.with
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,11 +23,10 @@ import cafe.adriel.voyager.transitions.SlideOrientation
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.eyedea.feature_dashboard.featureDashboardModule
 import com.eyedea.feature_dashboard.landing.DashboardLandingScreen
+import com.eyedea.feature_detail.featureDetailModule
 import com.eyedea.service_anime.serviceAnimeModule
-import com.eyedea.shared_ui_components.Res
 import com.eyedea.shared_ui_components.util.generateImageLoader
 import com.seiko.imageloader.LocalImageLoader
-import dev.icerock.moko.resources.compose.painterResource
 import di.routerModule
 import io.github.aakira.napier.Napier
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -42,6 +40,7 @@ fun App() {
             listOf(
                 serviceAnimeModule(),
                 featureDashboardModule(),
+                featureDetailModule()
             ).flatten().plus(routerModule()),
         )
     }

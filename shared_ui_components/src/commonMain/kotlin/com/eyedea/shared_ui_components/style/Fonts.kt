@@ -89,13 +89,13 @@ val urbanistMedium : FontFamily
     color = Color.White
 )
 
-@Composable fun bodyMediumSemibold() = TextStyle(
+@Composable fun bodyMediumSemiBold() = TextStyle(
     fontSize = 14.sp,
     fontFamily = urbanistSemiBold,
     color = Color.White
 )
 
-@Composable fun urbanistSemiBold16() = TextStyle(
+@Composable fun bodyLargeSemiBold() = TextStyle(
     fontSize = 16.sp,
     fontFamily = urbanistSemiBold,
     color = Color.White

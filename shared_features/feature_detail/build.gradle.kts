@@ -67,6 +67,9 @@ kotlin {
                 implementation("io.ktor:ktor-client-core:2.3.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
+                implementation("io.github.qdsfdhvh:image-loader:1.6.0")
+
+
             }
         }
         val androidMain by getting {

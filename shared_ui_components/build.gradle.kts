@@ -49,7 +49,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-
+                implementation("io.ktor:ktor-client-okhttp:2.3.1")
             }
         }
         val iosX64Main by getting

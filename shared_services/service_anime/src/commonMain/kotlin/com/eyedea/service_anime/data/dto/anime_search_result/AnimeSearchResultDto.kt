@@ -27,6 +27,8 @@ data class AnimeSearchResultDto(
     val type: String,
     val url: String,
     val score: Double? = null,
+    val genres: List<GenreDto>? = emptyList(),
+    val synopsis: String? = null
 )
 
 

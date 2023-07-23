@@ -1,27 +1,31 @@
 package com.eyedea.feature_dashboard.home
 
-import androidx.compose.runtime.mutableStateOf
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
-import com.eyedea.service_anime.domain.usecase.GetPopularAnimeListUseCase
+import com.eyedea.service_anime.domain.usecase.GetNewReleaseListUseCase
+import com.eyedea.service_anime.domain.usecase.GetTopAiringListUseCase
 import com.eyedea.shared_core.base.BaseViewModel
 import com.eyedea.shared_core.base.StatefulData
+import com.eyedea.shared_core.base.StatefulFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class HomeScreenModel(
-    getPopularAnimeListUseCase: GetPopularAnimeListUseCase
+    getPopularAnimeListUseCase: GetTopAiringListUseCase,
+    getNewReleaseListUseCase: GetNewReleaseListUseCase
 ) : BaseViewModel() {
-    val popularAnime = StatefulData(
+    val popularAnime = StatefulFlow(
         getPopularAnimeListUseCase,
         coroutineScope
     )
-    val pressedAnimeDetailId = MutableStateFlow("")
+    val newRelease = StatefulData(
+        getNewReleaseListUseCase,
+        coroutineScope
+    )
 
     init {
         popularAnime.loadData(Unit)
+        newRelease.loadData(Unit)
     }
 
     override fun getStatefulData(): List<StatefulData<*, *>> {
-        return listOf(popularAnime)
+        return listOf()
     }
 }

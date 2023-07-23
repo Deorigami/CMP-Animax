@@ -5,7 +5,7 @@ import com.eyedea.feature_util.router.GlobalRouter
 import com.eyedea.shared_core.base.BaseRouter
 
 abstract class GlobalRouterImpl : BaseRouter(), GlobalRouter {
-    override fun navigateToAnimeDetail(id: Int) {
+    override fun navigateToAnimeDetail(id: String) {
         push(AnimeDetailScreen(id))
     }
 }

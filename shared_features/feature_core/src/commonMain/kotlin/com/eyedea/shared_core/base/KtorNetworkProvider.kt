@@ -4,6 +4,8 @@ import com.eyedea.shared_core.getPlatform
 import com.eyedea.shared_core.util.KtorClientEngine
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.cache.HttpCache
+import io.ktor.client.plugins.cache.storage.CacheStorage
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.observer.ResponseObserver
@@ -19,8 +21,11 @@ object KtorNetworkProvider {
 
     val platform = getPlatform().name
     val client get() = KtorClientEngine.build().getClientEngine {
+        install(HttpCache){
+            
+        }
         defaultRequest {
-            url("https://api.jikan.moe/v4/")
+            url("https://api.anify.tv/")
             headers {
 
             }

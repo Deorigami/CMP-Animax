@@ -71,6 +71,7 @@ kotlin {
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.10.1")
 
+                implementation("io.ktor:ktor-client-core:2.3.0")
                 implementation("io.ktor:ktor-client-cio:2.3.0")
                 implementation("io.ktor:ktor-client-okhttp:2.3.1")
 

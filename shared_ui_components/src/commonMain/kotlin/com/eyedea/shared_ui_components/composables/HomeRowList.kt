@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -28,11 +27,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eyedea.shared_ui_components.style.Colors
-import com.eyedea.shared_ui_components.style.bodyMediumSemibold
+import com.eyedea.shared_ui_components.style.bodyLargeBold
+import com.eyedea.shared_ui_components.style.bodyLargeSemiBold
+import com.eyedea.shared_ui_components.style.bodyMediumSemiBold
 import com.eyedea.shared_ui_components.style.bodyXSmallSemiBold
-import com.eyedea.shared_ui_components.style.h2Bold
 import com.eyedea.shared_ui_components.style.h5Bold
-import com.eyedea.shared_ui_components.style.h6Bold
 import com.eyedea.shared_ui_components.util.callback
 import com.eyedea.shared_ui_components.util.genericCallback
 import com.eyedea.shared_ui_components.util.scaledClickable
@@ -49,7 +48,7 @@ fun HomeRowList(
     Column(modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Text(headerTitle, style = h5Bold())
-            Text("See All", style = bodyMediumSemibold().copy(Colors.primary500()), modifier = Modifier.scaledClickable { onRightHeaderPressed.invoke() })
+            Text("See All", style = bodyMediumSemiBold().copy(Colors.primary500()), modifier = Modifier.scaledClickable { onRightHeaderPressed.invoke() })
         }
         LazyRow(
             modifier = Modifier.padding(top = 24.dp),
@@ -80,8 +79,22 @@ fun HomeRowListCardItem(
         onCardPressed.invoke()
     }) {
         val image = rememberImagePainter(data.image)
-        Image(image, "", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+        Image(image, "", modifier = Modifier.fillMaxSize().drawWithCache {
+            onDrawWithContent {
+                drawContent()
+                drawRect(Brush.verticalGradient(
+                    0.5f to Color.Black.copy(alpha=0F),
+                    1F to Color.Black.copy(alpha = 0.75f)
+                ))
+            }
+        }, contentScale = ContentScale.Crop)
         Text(data.rating, modifier = Modifier.padding(12.dp).clip(RoundedCornerShape(6.dp)).background(Colors.primary500()).align(Alignment.TopStart).padding(vertical = 6.dp, horizontal = 10.dp), style = bodyXSmallSemiBold())
-        Text(data.index, modifier = Modifier.padding(12.dp).align(Alignment.BottomStart), style = h2Bold())
+        Text(
+            data.title,
+            modifier = Modifier.padding(12.dp).align(Alignment.BottomStart),
+            style = bodyLargeSemiBold(),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }

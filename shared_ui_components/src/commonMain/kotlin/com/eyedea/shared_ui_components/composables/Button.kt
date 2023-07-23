@@ -2,7 +2,6 @@ package com.eyedea.shared_ui_components.composables
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,7 +13,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
@@ -22,7 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.eyedea.shared_ui_components.style.Colors
 import com.eyedea.shared_ui_components.style.bodyLargeBold
-import com.eyedea.shared_ui_components.style.bodyMediumSemibold
+import com.eyedea.shared_ui_components.style.bodyMediumSemiBold
 import com.eyedea.shared_ui_components.util.callback
 
 object Button {
@@ -45,7 +43,7 @@ object Button {
                 defaultElevation = 0.dp,
             )
         ) {
-            Text(text = text, style = textStyle ?: bodyMediumSemibold(), color = Color.White)
+            Text(text = text, style = textStyle ?: bodyMediumSemiBold(), color = Color.White)
         }
     }
 
@@ -75,7 +73,7 @@ object Button {
                 Image(leadingIcon, "", modifier = Modifier.size(20.dp))
             }
             if (text.isNotEmpty()) {
-                Text(text, Modifier.padding(start = 8.dp), style = bodyMediumSemibold())
+                Text(text, Modifier.padding(start = 8.dp), style = bodyMediumSemiBold())
             }
         }
     }
@@ -108,7 +106,7 @@ object Button {
                 Image(leadingIcon, "", modifier = Modifier.size(20.dp))
             }
             if (text.isNotEmpty()) {
-                Text(text, Modifier.padding(start = 8.dp), style = bodyMediumSemibold())
+                Text(text, Modifier.padding(start = 8.dp), style = bodyMediumSemiBold())
             }
         }
     }

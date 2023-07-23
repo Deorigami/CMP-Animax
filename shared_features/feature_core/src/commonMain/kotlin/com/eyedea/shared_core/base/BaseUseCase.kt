@@ -1,7 +1,9 @@
 package com.eyedea.shared_core.base
 
 import com.eyedea.shared_core.extensions.tryDeserialize
+import com.eyedea.shared_core.util.SessionManager
 import io.github.aakira.napier.Napier
+import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.statement.*
 import kotlinx.coroutines.CoroutineScope
@@ -49,9 +51,12 @@ abstract class BaseUseCase<P, R> {
 }
 
 suspend inline fun <reified DTO, ENTITY> HttpResponse.dtoToBaseRespondEntity(block: (DTO) -> ENTITY): BaseRespondEntity<ENTITY> {
-    val dto = tryDeserialize<DTO>(this.bodyAsText()) {
-        return BaseRespondEntity(error = Throwable(it))
-    } ?: return BaseRespondEntity(error = Throwable("SOMETHING WENT WRONG"))
+    val dto = tryDeserialize<DTO>(bodyAsText().apply {
+        Napier.d(tag = "IS_CACHED") { "${call.request.url} : ${call.request.headers.contains("cached")}" }
+        if (call.request.headers.contains("cached")) SessionManager.save(this, call.request.url.toString())
+    }){
+        Napier.e(tag = "SERIALIZE_ERROR") { "$it : ${DTO::class.qualifiedName}" }
+    }
     return BaseRespondEntity(block.invoke(dto))
 }
 
@@ -59,8 +64,8 @@ suspend inline fun <reified DTO, ENTITY> HttpResponse.toBaseRespondEntity(block:
     if (this.status.value >= 300) throw ClientRequestException(this, "")
     return kotlin.runCatching {
         val dto = tryDeserialize<BaseRespondDto<DTO>>(this.bodyAsText().also {
-            Napier.d(tag = "ANGGATAG") { "Response From (${this.call.request.url}) : "}
-            Napier.d(tag = "ANGGATAG") { it }
+            Napier.d(tag = "HTTP_RESPONSE") { "Response From (${this.call.request.url}) : "}
+            Napier.d(tag = "HTTP_RESPONSE") { it }
         })
         return BaseRespondEntity(dto.data?.let {
             val result = block.invoke(it)
