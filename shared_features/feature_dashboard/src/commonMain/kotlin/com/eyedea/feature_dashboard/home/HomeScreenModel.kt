@@ -15,12 +15,12 @@ class HomeScreenModel(
         getPopularAnimeListUseCase,
         coroutineScope
     )
-    val newRelease = StatefulData(
+    val newRelease = StatefulFlow(
         getNewReleaseListUseCase,
         coroutineScope
     )
 
-    init {
+    fun initData(){
         popularAnime.loadData(Unit)
         newRelease.loadData(Unit)
     }

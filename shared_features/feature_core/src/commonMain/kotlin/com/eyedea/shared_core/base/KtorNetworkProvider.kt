@@ -2,6 +2,7 @@ package com.eyedea.shared_core.base
 
 import com.eyedea.shared_core.getPlatform
 import com.eyedea.shared_core.util.KtorClientEngine
+import com.eyedea.shared_core.util.SessionManager
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.cache.HttpCache
@@ -25,7 +26,7 @@ object KtorNetworkProvider {
             
         }
         defaultRequest {
-            url("https://api.anify.tv/")
+            url(SessionManager.BASE_URL)
             headers {
 
             }

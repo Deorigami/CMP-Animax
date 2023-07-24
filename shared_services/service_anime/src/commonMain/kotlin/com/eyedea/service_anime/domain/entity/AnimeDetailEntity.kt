@@ -11,12 +11,22 @@ data class AnimeDetailEntity(
     val synopsis: String
 ) {
     companion object {
-        val DEFAULT = AnimeDetailEntity(id = "", image = "", title = "", rating = "", yearProduced = "", genre = "", episodes = listOf(), synopsis = "")
+        val DEFAULT = AnimeDetailEntity(
+            id = "",
+            image = "",
+            title = "",
+            rating = "",
+            yearProduced = "",
+            genre = "",
+            episodes = listOf(),
+            synopsis = ""
+        )
     }
 }
 
 data class AnimeDetailEpisodeEntity(
     val image : String,
     val id : String,
-    val title: String
+    val title: String,
+    val isWatched: Boolean = false
 )

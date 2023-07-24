@@ -22,6 +22,7 @@ object SessionManager {
     }
 
     const val API_KEY = "fae494e3b9e506ccd74586c128c58f50"
+    const val BASE_URL = "https://api.anify.tv/"
 
     private object Key {
         const val REGISTERED_NUMBER_KEY = "REGISTERED_NUMBER_KEY"

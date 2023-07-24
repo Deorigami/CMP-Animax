@@ -15,9 +15,9 @@ data class SeasonalAnimeDto(
         fun SeasonalAnimeDto.toAnimeShowCaseListEntity() : AnimeShowcaseListEntity {
             return AnimeShowcaseListEntity(
                 trending = trending?.map { it.toAnimeShowCaseEntity() } ?: emptyList(),
-                popular = trending?.map { it.toAnimeShowCaseEntity() } ?: emptyList(),
-                top = trending?.map { it.toAnimeShowCaseEntity() } ?: emptyList(),
-                seasonal = trending?.map { it.toAnimeShowCaseEntity() } ?: emptyList()
+                popular = popular?.map { it.toAnimeShowCaseEntity() } ?: emptyList(),
+                top = top?.map { it.toAnimeShowCaseEntity() } ?: emptyList(),
+                seasonal = seasonal?.map { it.toAnimeShowCaseEntity() } ?: emptyList()
             )
         }
 

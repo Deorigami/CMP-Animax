@@ -1,5 +1,9 @@
 package com.eyedea.service_anime.data.dto.anify
 
+import com.eyedea.service_anime.domain.entity.AnimeDetailEntity
+import com.eyedea.service_anime.domain.entity.AnimeDetailEpisodeEntity
+import com.eyedea.service_anime.domain.entity.AnimeShowcaseEntity
+import io.github.aakira.napier.Napier
 import kotlinx.serialization.Serializable
 
 
@@ -37,7 +41,42 @@ data class AnimeDetailDto(
     val trailer: String? = null,
     val type: String,
     val year: Int? = null
-)
+) {
+    companion object {
+        fun AnimeDetailDto.toAnimeDetailEntity() : AnimeDetailEntity {
+            val episodeProvider = episodes.data.firstOrNull { it.episodes.any { !it.img.isNullOrEmpty() } }
+                ?: episodes.data.firstOrNull()
+            return AnimeDetailEntity(
+                id = id,
+                image = artwork.firstOrNull { it.type == "poster" }?.img ?: bannerImage,
+                title = title.english ?: "",
+                rating = averageRating,
+                yearProduced = year?.toString() ?: "",
+                genre = genres.joinToString(","),
+                episodes = episodeProvider.let { data ->
+                    data?.episodes?.sortedByDescending { it.number.toIntOrNull() }?.map { episode ->
+                        AnimeDetailEpisodeEntity(
+                            image = episode.img.takeIf { !it.isNullOrEmpty() } ?: coverImage,
+                            id = episode.id,
+                            title = "Episode ${episode.number}"
+                        )
+                    }
+                } ?: emptyList(),
+                synopsis = description
+            )
+        }
+
+        fun AnimeDetailDto.toAnimeShowCaseEntity() = AnimeShowcaseEntity(
+            animeId = id,
+            animeImg = coverImage,
+            animeTitle = title.english ?: "",
+            animeUrl = "",
+            releasedDate = year?.toString() ?: "",
+            rating = averageRating,
+            genres = genres.joinToString(","),
+        )
+    }
+}
 
 @Serializable
 data class Artwork(

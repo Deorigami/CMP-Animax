@@ -8,6 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ServiceAnimeRepository {
     suspend fun getTopAiringList() : Flow<BaseRespondEntity<AnimeShowcaseListEntity>>
-    suspend fun getNewReleaseList() : BaseRespondEntity<List<AnimeShowcaseEntity>>
-    suspend fun getAnimeDetail(id : String) : BaseRespondEntity<AnimeDetailEntity>
+    suspend fun getNewReleaseList() : Flow<BaseRespondEntity<List<AnimeShowcaseEntity>>>
+    suspend fun getAnimeDetail(id : String) : Flow<BaseRespondEntity<AnimeDetailEntity>>
 }

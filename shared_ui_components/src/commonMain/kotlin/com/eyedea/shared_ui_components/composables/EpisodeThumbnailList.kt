@@ -77,7 +77,7 @@ fun EpisodeThumbnailList(
     Column(modifier = modifier.fillMaxWidth()) {
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp), verticalAlignment = Alignment.CenterVertically){
             Text("Episodes", modifier = Modifier.weight(1f), style = h6Bold())
-            Text("Season 2", style = bodyMediumSemiBold().copy(Colors.primary500()), modifier = Modifier.padding(end = 4.dp))
+            Text("See All", style = bodyMediumSemiBold().copy(Colors.primary500()), modifier = Modifier.padding(end = 4.dp))
             Image(painter = painterResource(Res.images.ic_simple_arrow_right), modifier = Modifier.rotate(90f), contentDescription = "")
         }
         LazyRow(modifier = Modifier.fillMaxWidth().padding(top = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(horizontal = 24.dp)) {

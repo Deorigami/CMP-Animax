@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import com.eyedea.feature_dashboard.DashboardRouter
 import com.eyedea.feature_dashboard.home.mapper.AnimeThumbnailEntityMapper
 import com.eyedea.service_anime.domain.entity.AnimeShowcaseEntity
@@ -38,34 +39,44 @@ import com.eyedea.shared_ui_components.style.h4Bold
 import com.seiko.imageloader.rememberImagePainter
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
-import org.koin.compose.koinInject
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object HomeScreen : BaseTab(), KoinComponent {
+data class HomeScreen(
+    val screenModel: HomeScreenModel
+) : BaseTab(), KoinComponent {
 
     override val router by inject<DashboardRouter>()
 
     @Composable
     override fun ComposeContent() {
         super.ComposeContent()
-        val screenModel = koinInject<HomeScreenModel>()
         val animeShowCaseListState = screenModel.popularAnime.state.collectAsState().value
         val newReleaseListState = screenModel.newRelease.state.collectAsState().value
         val trendingListState = remember(animeShowCaseListState.data) {
             animeShowCaseListState.data?.trending?.toMutableStateList()
         }
+
+        val topListData = remember(animeShowCaseListState.data) {
+            AnimeThumbnailEntityMapper().invoke(animeShowCaseListState.data?.top)
+        }
+
+        val popularListData = remember(animeShowCaseListState.data) {
+            AnimeThumbnailEntityMapper().invoke(animeShowCaseListState.data?.popular)
+        }
+
         val trendingListData = remember(trendingListState) {
             AnimeThumbnailEntityMapper().invoke(trendingListState)
         }
         val newReleaseList = remember(newReleaseListState.data) {
             AnimeThumbnailEntityMapper().invoke(newReleaseListState.data?.take(10))
         }
+
         val containerScrollState = rememberScrollState()
 
 
         Column (modifier = Modifier.verticalScroll(containerScrollState)){
-            trendingListState?.first()?.let {
+            trendingListState?.sortedByDescending { it.rating.toDoubleOrNull() }?.first()?.let {
                 Header(
                     modifier = Modifier.fillMaxWidth().background(Color.Black),
                     data = it
@@ -77,6 +88,22 @@ object HomeScreen : BaseTab(), KoinComponent {
                 modifier = Modifier.padding(top = 24.dp),
                 onCardPressed = {
                     router.navigateToAnimeDetail(trendingListState?.getOrNull(it)?.animeId ?: return@HomeRowList)
+                },
+            )
+            HomeRowList(
+                headerTitle = "Top",
+                list = topListData,
+                modifier = Modifier.padding(top = 24.dp),
+                onCardPressed = {
+                    router.navigateToAnimeDetail(animeShowCaseListState.data?.top?.getOrNull(it)?.animeId ?: return@HomeRowList)
+                },
+            )
+            HomeRowList(
+                headerTitle = "Popular",
+                list = popularListData,
+                modifier = Modifier.padding(top = 24.dp),
+                onCardPressed = {
+                    router.navigateToAnimeDetail(animeShowCaseListState.data?.popular?.getOrNull(it)?.animeId ?: return@HomeRowList)
                 },
             )
             HomeRowList(

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -22,36 +21,41 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cafe.adriel.voyager.navigator.tab.CurrentTab
-import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.eyedea.feature_dashboard.download.DownloadScreen
 import com.eyedea.feature_dashboard.home.HomeScreen
+import com.eyedea.feature_dashboard.home.HomeScreenModel
 import com.eyedea.feature_dashboard.my_list.MyListScreen
 import com.eyedea.feature_dashboard.profile.ProfileScreen
 import com.eyedea.feature_dashboard.releases.ReleaseDateScreen
 import com.eyedea.shared_core.base.BaseTab
 import com.eyedea.shared_core.util.callback
 import com.eyedea.shared_core.util.genericCallback
-import com.eyedea.shared_ui_components.Res
 import com.eyedea.shared_ui_components.style.Colors
 import com.eyedea.shared_ui_components.style.bodySmallBold
-import com.eyedea.shared_ui_components.style.bodyXSmallMedium
 import dev.icerock.moko.resources.compose.painterResource
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 object DashboardLandingScreen : Screen {
+
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
         val localNavigator = LocalNavigator.currentOrThrow
-        val screenList = listOf(HomeScreen, ReleaseDateScreen, MyListScreen, DownloadScreen, ProfileScreen)
+        val homeScreenViewModel = koinInject<HomeScreenModel>()
+        val homeScreen = HomeScreen(homeScreenViewModel)
+
+        LifecycleEffect(
+            onStarted = {
+                homeScreenViewModel.initData()
+            }
+        )
+
+        val screenList = listOf(homeScreen, ReleaseDateScreen, MyListScreen, DownloadScreen, ProfileScreen)
         val pagerState = rememberPagerState()
         val coroutineScope = rememberCoroutineScope()
         Box(modifier = Modifier.fillMaxSize()) {

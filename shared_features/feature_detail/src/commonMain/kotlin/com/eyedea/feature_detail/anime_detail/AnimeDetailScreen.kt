@@ -62,8 +62,6 @@ data class AnimeDetailScreen(
             onStarted = { viewModel.animeDetail.loadData(id) }
         )
 
-        Napier.d(tag = "ANGGATAG") { animeDetailState.toString() }
-
         Column (modifier = Modifier.fillMaxSize()){
             Header(animeDetailState?.image ?: "")
             Column(modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(contentDetailScrollState)){
