@@ -35,15 +35,6 @@ import org.koin.core.context.startKoin
 @OptIn(ExperimentalAnimationApi::class, ExperimentalResourceApi::class)
 @Composable
 fun App() {
-    startKoin {
-        modules(
-            listOf(
-                serviceAnimeModule(),
-                featureDashboardModule(),
-                featureDetailModule()
-            ).flatten().plus(routerModule()),
-        )
-    }
     CompositionLocalProvider(
         LocalImageLoader provides generateImageLoader()
     ){

@@ -11,5 +11,8 @@ struct iOSApp: App {
     
     init() {
         KoinHelperKt.doInitKoin()
+        NapierHelperKt.doInitNappier()
     }
 }
+
+

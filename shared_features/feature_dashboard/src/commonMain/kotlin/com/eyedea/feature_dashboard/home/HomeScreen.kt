@@ -39,6 +39,7 @@ import com.eyedea.shared_ui_components.style.h4Bold
 import com.seiko.imageloader.rememberImagePainter
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
+import io.github.aakira.napier.Napier
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -56,7 +57,7 @@ data class HomeScreen(
         val trendingListState = remember(animeShowCaseListState.data) {
             animeShowCaseListState.data?.trending?.toMutableStateList()
         }
-
+        Napier.d(tag = "animeShowCaseListState") { animeShowCaseListState.toString() }
         val topListData = remember(animeShowCaseListState.data) {
             AnimeThumbnailEntityMapper().invoke(animeShowCaseListState.data?.top)
         }
@@ -76,7 +77,7 @@ data class HomeScreen(
 
 
         Column (modifier = Modifier.verticalScroll(containerScrollState)){
-            trendingListState?.sortedByDescending { it.rating.toDoubleOrNull() }?.first()?.let {
+            trendingListState?.sortedByDescending { it.rating.toDoubleOrNull() }?.firstOrNull()?.let {
                 Header(
                     modifier = Modifier.fillMaxWidth().background(Color.Black),
                     data = it

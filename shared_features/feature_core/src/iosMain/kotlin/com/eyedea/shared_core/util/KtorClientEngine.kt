@@ -9,7 +9,7 @@ import platform.Foundation.NSTimeInterval
 actual class KtorClientEngine {
     actual fun getClientEngine(config: HttpClientConfig<*>.() -> Unit) : HttpClient = HttpClient(Darwin){
         defaultRequest {
-            url("https://api.jikan.moe/v4/")
+            url(SessionManager.BASE_URL)
         }
         engine {
             configureRequest {
