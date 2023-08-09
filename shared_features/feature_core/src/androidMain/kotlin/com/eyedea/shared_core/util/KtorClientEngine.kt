@@ -7,8 +7,13 @@ import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.cache.HttpCache
+import io.ktor.client.plugins.cache.storage.FileStorage
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.utils.HttpResponseReceived
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class AppContext(val context: Context)
 
@@ -19,6 +24,10 @@ actual class KtorClientEngine constructor(private val appContext: AppContext) {
 //            requestTimeout = 0
             addInterceptor(ChuckerInterceptor.Builder(appContext.context).build())
 
+        }
+        install(HttpCache){
+//            val cacheFile = Files.createDirectory(Paths.get("build/cache")).toFile()
+//            publicStorage(FileStorage(cacheFile))
         }
     }
     actual companion object Factory {

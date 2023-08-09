@@ -41,7 +41,7 @@ class ServiceAnimeRepositoryImpl : ServiceAnimeRepository {
 
     override suspend fun getAnimeDetail(id: String): Flow<BaseRespondEntity<AnimeDetailEntity>> = client
         .toFlow<AnimeDetailDto, AnimeDetailEntity>(
-            "https://api.anify.tv/info/$id?apikey=${SessionManager.API_KEY}",
+            "info/$id?apikey=${SessionManager.API_KEY}",
             method = HttpMethod.Get,
             getCache = true,
             block = { it.toAnimeDetailEntity() }
